@@ -67,6 +67,16 @@ def generate_launch_description():
         default_value=os.path.join(multi_dir, 'params', 'nav2_multirobot_params_3.yaml'),
         description='Full path to the ROS2 parameters file to use for robot2 launched nodes')
 
+    model_path = os.path.join(
+        get_package_share_directory('multi_robot'),
+        'robot',
+        'waffle.model')
+
+    declare_robot_sdf_cmd = DeclareLaunchArgument(
+        'robot_sdf',
+        default_value=model_path,
+        description='Full path to robot sdf file to spawn the robot in gazebo')
+
     # On this example all robots are launched with the same settings
     map_yaml_file = LaunchConfiguration('map')
 
@@ -135,6 +145,11 @@ def generate_launch_description():
     )
 
     # Declare the launch arguments
+    declare_simulator_cmd = DeclareLaunchArgument(
+        'simulator',
+        default_value='gazebo',
+        description='The simulator to use (gazebo or gzserver)')
+
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map',
         default_value=os.path.join(multi_dir, 'maps', 'aws_hospital.yaml'),
@@ -160,7 +175,6 @@ def generate_launch_description():
         description='Whether to start RVIZ')
 
     # Define commands for launching the navigation instances
-    launch_file_dir = os.path.join(get_package_share_directory('multi_robot'), 'launch')
     nav_instances_cmds = []
     for robot in robots:
         params_file = LaunchConfiguration(f"{robot['name']}_params_file")
@@ -177,8 +191,8 @@ def generate_launch_description():
 
             IncludeLaunchDescription(
 
-                PythonLaunchDescriptionSource(os.path.join(launch_file_dir,
-                                                           'tb3_simulation.launch.py')),
+                PythonLaunchDescriptionSource(os.path.join(bringup_dir, 'launch',
+                                                           'tb3_simulation_launch.py')),
                 launch_arguments={'namespace': robot['name'],
                                   'use_namespace': 'True',
                                   'map': map_yaml_file,
@@ -223,7 +237,8 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Declare the launch options
-    ld.add_action(gazebo)
+    ld.add_action(declare_robot_sdf_cmd)
+    ld.add_action(declare_simulator_cmd)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_robot1_params_file_cmd)
     ld.add_action(declare_robot2_params_file_cmd)
@@ -232,6 +247,7 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
+    ld.add_action(gazebo)
 
     for simulation_instance_cmd in nav_instances_cmds:
         ld.add_action(simulation_instance_cmd)
