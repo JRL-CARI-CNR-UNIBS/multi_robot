@@ -40,32 +40,33 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('nav2_bringup')
     launch_dir = os.path.join(bringup_dir, 'launch')
 
-    # Names and poses of the robots
-    # TODO: Read from yaml file
-    robots = [
-        {'name': 'robot1', 'x_pose': 0.0, 'y_pose': 0, 'z_pose': 0.01,
-                           'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},
-        {'name': 'robot2', 'x_pose': 0.0, 'y_pose': 1, 'z_pose': 0.01,
-                           'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0},
-        {'name': 'robot3', 'x_pose': 0.0, 'y_pose': 2, 'z_pose': 0.01,
-                           'roll': 0.0, 'pitch': 0.0, 'yaw': 0.0}
-             ]
-
     multi_dir = get_package_share_directory('multi_robot')
-    declare_robot1_params_file_cmd = DeclareLaunchArgument(
-        'robot1_params_file',
-        default_value=os.path.join(multi_dir, 'params', 'nav2_multirobot_params_1.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot1 launched nodes')
+    config = os.path.join(multi_dir, 'config', 'params.yaml')
 
-    declare_robot2_params_file_cmd = DeclareLaunchArgument(
-        'robot2_params_file',
-        default_value=os.path.join(multi_dir, 'params', 'nav2_multirobot_params_2.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot2 launched nodes')
+    with open(config, "r") as stream:
+        try:
+            conf = (yaml.safe_load(stream))
 
-    declare_robot3_params_file_cmd = DeclareLaunchArgument(
-        'robot3_params_file',
-        default_value=os.path.join(multi_dir, 'params', 'nav2_multirobot_params_3.yaml'),
-        description='Full path to the ROS2 parameters file to use for robot2 launched nodes')
+        except yaml.YAMLError as exc:
+            print(exc)
+
+
+    # Names and poses of the robot, read from yaml file
+    robots_number = conf['multi_robot']['robots_number']
+
+    robots = []
+    robots_params = []
+    for num in range(robots_number):
+        rb_name = 'robot' + str(num+1)
+        rb_position = conf['multi_robot'][rb_name]
+        rb_data = {'name': rb_name, 'x_pose': rb_position['x'], 'y_pose': rb_position['y'], 'z_pose': rb_position['z'],
+                   'roll': rb_position['roll'], 'pitch': rb_position['pitch'], 'yaw': rb_position['yaw']}
+        robots.append(rb_data)
+        rb_params = DeclareLaunchArgument(
+            rb_name + '_params_file',
+            default_value=os.path.join(multi_dir, 'params', 'nav2_params_' + rb_name + '.yaml'),
+            description='Full path to the ROS2 parameters file to use for ' + rb_name + ' launched nodes')
+        robots_params.append(rb_params)
 
     model_path = os.path.join(
         get_package_share_directory('multi_robot'),
@@ -85,15 +86,6 @@ def generate_launch_description():
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
     use_rviz = LaunchConfiguration('use_rviz')
     log_settings = LaunchConfiguration('log_settings', default='true')
-
-    config = os.path.join(multi_dir, 'config', 'params.yaml')
-
-    with open(config, "r") as stream:
-        try:
-            conf = (yaml.safe_load(stream))
-
-        except yaml.YAMLError as exc:
-            print(exc)
 
     world_name = conf['multi_robot']['world']
 
@@ -240,9 +232,10 @@ def generate_launch_description():
     ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_simulator_cmd)
     ld.add_action(declare_map_yaml_cmd)
-    ld.add_action(declare_robot1_params_file_cmd)
-    ld.add_action(declare_robot2_params_file_cmd)
-    ld.add_action(declare_robot3_params_file_cmd)
+
+    for param in robots_params:
+        ld.add_action(param)
+
     ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
