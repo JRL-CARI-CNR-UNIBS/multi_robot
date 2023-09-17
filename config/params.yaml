@@ -24,6 +24,7 @@ multi_robot:
   world: aws_house
   robots_number: 3
 
+  # Check there is a params file for each robot and set the initial position for each one
   robot1:
     x: 0.0
     y: 0.0
