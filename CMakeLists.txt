@@ -15,7 +15,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 
-install(DIRECTORY launch config maps params robot
+install(DIRECTORY launch config maps params robot models worlds
         DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
