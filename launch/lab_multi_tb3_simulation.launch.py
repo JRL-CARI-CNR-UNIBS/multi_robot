@@ -29,7 +29,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, ExecuteProcess, GroupAction,
-                            IncludeLaunchDescription, LogInfo)
+                            IncludeLaunchDescription, LogInfo, SetEnvironmentVariable)
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, TextSubstitution
@@ -102,7 +102,7 @@ def generate_launch_description():
         gazebo = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([os.path.join(
                 get_package_share_directory('aws_robomaker_small_house_world'),
-                'launch'), '/view_small_house.launch.py']),
+                'launch'), '/view_small_house.launch.pylab']),
         )
         # Hospital
         if "hospital" in world_name:
@@ -251,5 +251,5 @@ def generate_launch_description():
 
     for simulation_instance_cmd in nav_instances_cmds:
         ld.add_action(simulation_instance_cmd)
-
+    # ld.add_action(SetEnvironmentVariable('GAZEBO_MODEL_PATH', os.path.join(get_package_share_directory('multi_robot'), 'share/multi_robot/models')))
     return ld

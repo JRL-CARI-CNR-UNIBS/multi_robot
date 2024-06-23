@@ -18,7 +18,7 @@ from ament_index_python.packages import get_package_share_directory
 
 import launch
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription, SetEnvironmentVariable, AppendEnvironmentVariable
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PythonExpression
@@ -66,6 +66,7 @@ def generate_launch_description():
     # Create the launch description and populate
     ld = LaunchDescription()
 
+    ld.add_action(SetEnvironmentVariable('GAZEBO_MODEL_PATH', os.path.join(get_package_share_directory('multi_robot'), 'models')))
     # Declare the launch options
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_simulator_cmd)
@@ -74,5 +75,11 @@ def generate_launch_description():
     # Add any conditioned actions
     ld.add_action(start_gazebo_server_cmd)
     ld.add_action(start_gazebo_client_cmd)
+    print(os.path.join(get_package_share_directory('multi_robot'), 'models'))
+    # set_env_vars_resources = AppendEnvironmentVariable(
+    #     'GAZEBO_MODEL_PATH',
+    #     os.path.join(get_package_share_directory('multi_robot'),
+    #                  'models'))
 
+    # ld.add_action(set_env_vars_resources)
     return ld

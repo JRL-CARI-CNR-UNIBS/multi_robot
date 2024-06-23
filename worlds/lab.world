@@ -136,7 +136,7 @@
         <kinematic>0</kinematic>
       </link>
       <static>1</static>
-      <pose>1.95409 -0.595122 0 0 -0 0</pose>
+      <pose>0.0 -0.0 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
       <sim_time>20 203000000</sim_time>
@@ -154,10 +154,10 @@
         </link>
       </model>
       <model name='lab'>
-        <pose>1.95409 -0.595122 0 0 -0 0</pose>
+        <pose>0.0 -0.0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.95409 -0.595122 0 0 -0 0</pose>
+          <pose>0.0 -0.0 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>

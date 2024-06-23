@@ -26,24 +26,24 @@ multi_robot:
 
   # Check there is a params file for each robot and set the initial position for each one
   robot1:
-    x: 0.0
-    y: 0.0
+    x: -0.47
+    y: -1.76
     z: 0.0
     roll: 0.0
     pitch: 0.0
     yaw: 0.0
 
   robot2:
-    x: 1.0
-    y: 1.0
+    x: -1.42
+    y: -3.0
     z: 0.0
     roll: 0.0
     pitch: 0.0
     yaw: 0.0
 
   robot3:
-    x: 1.0
-    y: 2.0
+    x: 0.38
+    y: -0.67
     z: 0.0
     roll: 0.0
     pitch: 0.0

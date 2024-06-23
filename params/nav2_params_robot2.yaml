@@ -43,7 +43,13 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: /robot2/scan
+    scan_topic: scan
+    set_initial_pose: True
+    initial_pose:
+      x: -1.42
+      y: -3.0
+      z: 0.0
+      yaw: 0.0
 
 bt_navigator:
   ros__parameters:
