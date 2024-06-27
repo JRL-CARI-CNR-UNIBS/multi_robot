@@ -89,7 +89,7 @@ def generate_launch_description():
 
     world_name = conf['multi_robot']['world']
     
-    if "lab" in world_name:
+    if "lab" in world_name or "robocup" in world_name:
         gazebo = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([os.path.join(
                 get_package_share_directory('multi_robot'),

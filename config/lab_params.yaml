@@ -22,7 +22,7 @@
 
 multi_robot:
   world: lab
-  robots_number: 3
+  robots_number: 2
 
   # Check there is a params file for each robot and set the initial position for each one
   robot1:

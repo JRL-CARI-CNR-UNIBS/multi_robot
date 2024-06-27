@@ -106,7 +106,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://lab/meshes/lab.stl</uri>
+              <uri>model://lab/meshes/clean_lab4.stl</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -127,7 +127,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://lab/meshes/lab.stl</uri>
+              <uri>model://lab/meshes/clean_lab4.stl</uri>
             </mesh>
           </geometry>
         </visual>

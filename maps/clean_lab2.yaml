@@ -1,4 +1,4 @@
-image: clean_lab4.pgm
+image: clean_lab2.pgm
 mode: trinary
 resolution: 0.05
 origin: [-11.8, -9.74, 0]
